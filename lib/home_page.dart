@@ -1,30 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:hello1/drawer_list.dart';
 import 'package:hello1/pages/hello_listView.dart';
-import 'package:hello1/pages/hello_page1.dart';
 import 'package:hello1/pages/hello_page3.dart';
 import 'package:hello1/pages/hello_page2.dart';
 import 'package:hello1/utils/nav.dart';
 import 'package:hello1/widgets/blue_button.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Hello Flutter",
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Hello Flutter",
+          ),
+          centerTitle: true,
+          bottom: TabBar(tabs: [
+            Tab(text: "TAB 1"),
+            Tab(text: "TAB 2"),
+            Tab(text: "TAB 3"),
+          ]),
         ),
-        centerTitle: true,
+        body: TabBarView(
+          children: [
+            _body(context),
+            Container(
+              color: Colors.yellow,
+            ),
+            Container(color: Colors.green)
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            _onClickFab();
+          },
+        ),
+        drawer: DrawerList(),
       ),
-      body: _body(context),
     );
+  }
+
+  _onClickFab() {
+    print("Adicionar");
   }
 
   _body(context) {
     return Container(
+      padding: EdgeInsets.only(top: 16),
       color: Colors.white,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           _text(),
           _pageView(),
@@ -112,7 +141,16 @@ class HomePage extends StatelessWidget {
     print(s);
   }
 
-  _onClickToast() => _onClickToast;
+  _onClickToast() {
+    Fluttertoast.showToast(
+        msg: "Flutter é Muito Legal!",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.black26,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
 
   _onClickDialog(_context) {
     showDialog(
