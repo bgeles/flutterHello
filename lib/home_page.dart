@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
         children: <Widget>[
           _text(),
           _pageView(),
-          _buttons(context),
+          _buttons(),
         ],
       ),
     );
@@ -75,29 +75,34 @@ class HomePage extends StatelessWidget {
     return BlueButton(text, onPressed: onPressed);
   }
 
-  _buttons(context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  _buttons() {
+    return Builder(
+      builder: (_context) {
+        return Column(
           children: <Widget>[
-            BlueButton("List View",
-                onPressed: () => _onClickNavigator(context, HelloListView())),
-            BlueButton("Page 2",
-                onPressed: () => _onClickNavigator(context, HelloPage2())),
-            BlueButton("Page 3",
-                onPressed: () => _onClickNavigator(context, HelloPage3())),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                BlueButton("List View",
+                    onPressed: () =>
+                        _onClickNavigator(_context, HelloListView())),
+                BlueButton("Page 2",
+                    onPressed: () => _onClickNavigator(_context, HelloPage2())),
+                BlueButton("Page 3",
+                    onPressed: () => _onClickNavigator(_context, HelloPage3())),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                BlueButton("Snack", onPressed: () => _onClickSnack(_context)),
+                BlueButton("Dialog", onPressed: () => _onClickDialog(_context)),
+                BlueButton("Toast", onPressed: _onClickToast),
+              ],
+            ),
           ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            BlueButton("Snack", onPressed: _onClickSnack),
-            BlueButton("Dialog", onPressed: _onClickDialog),
-            BlueButton("Toast", onPressed: _onClickToast),
-          ],
-        ),
-      ],
+        );
+      },
     );
   }
 
@@ -109,7 +114,42 @@ class HomePage extends StatelessWidget {
 
   _onClickToast() => _onClickToast;
 
-  _onClickDialog() => _onClickDialog;
+  _onClickDialog(_context) {
+    showDialog(
+      context: _context,
+      barrierDismissible: false,
+      builder: (_context) {
+        return AlertDialog(
+          title: Text("Flutter é muito legal"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Cancelar"),
+              onPressed: () {
+                Navigator.pop(_context);
+              },
+            ),
+            FlatButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.pop(_context);
+                print("OK");
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-  _onClickSnack() => _onClickSnack;
+  _onClickSnack(context) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text("Ola Flutter"),
+      action: SnackBarAction(
+        label: "OK",
+        onPressed: () {
+          print("OK");
+        },
+      ),
+    ));
+  }
 }
